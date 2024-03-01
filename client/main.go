@@ -32,8 +32,10 @@ func main() {
 	challenge := strings.TrimPrefix(scanner.Text(), challengePrefix)
 	solution := solveProofOfWork(challenge)
 
-	conn.Write([]byte(solution + "\n"))
-
+	if _, err := conn.Write([]byte(solution + "\n")); err != nil {
+		log.Println("Error sending solution:", err)
+		return
+	}
 	for scanner.Scan() {
 		log.Println("Received quote:", scanner.Text())
 	}

@@ -14,7 +14,7 @@ import (
 var (
 	challengePrefix = "Challenge:"
 	difficulty      = 5
-	port = ":8080"
+	port            = ":8080"
 )
 
 var quotes = []string{
@@ -49,9 +49,8 @@ func handleConnection(conn net.Conn) {
 
 	challenge := generateChallenge()
 
-	_, err := conn.Write([]byte(challengePrefix + challenge + "\n"))
-	if err != nil {
-		log.Println("Error sending quote:", err)
+	if _, err := conn.Write([]byte(challengePrefix + challenge + "\n")); err != nil {
+		log.Println("Error sending challenge:", err)
 		return
 	}
 	log.Println("Sent challenge:", challenge)
@@ -63,16 +62,22 @@ func handleConnection(conn net.Conn) {
 	log.Println("Received solution:", solution)
 
 	if !verifyProofOfWork(solution) {
-		conn.Write([]byte("Proof of Work verification failed!\n"))
+		if _, err := conn.Write([]byte("Proof of Work verification failed!\n")); err != nil {
+			log.Println("Error sending verification failed:", err)
+		}
 		return
 	}
 
-	conn.Write([]byte(getRandomQuote() + "\n"))
+	if _, err := conn.Write([]byte(getRandomQuote() + "\n")); err != nil {
+		log.Println("Error sending quote:", err)
+		return
+	}
 }
 
 func verifyProofOfWork(solution string) bool {
 	hash := sha256.Sum256([]byte(solution))
 	hashString := hex.EncodeToString(hash[:])
+
 	return strings.HasPrefix(hashString, strings.Repeat("0", difficulty))
 }
 

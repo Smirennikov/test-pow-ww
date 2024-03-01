@@ -8,12 +8,16 @@ Design and implement “Word of Wisdom” tcp server.
 - Docker file should be provided both for the server and for the client that solves the POW challenge
 
 
-## How run server
+## How to run server
 1. `docker build -t pw-server .`
 2. `docker run --rm pw-server`
 
-## How run client
+## How to run client
 1. `docker build -t pw-client .`
 2. `docker run --rm pw-server`
 
+## How to run test
+`go test ./...`
 
+## How to run lint
+`golangci-lint run`
