@@ -14,7 +14,7 @@ Design and implement “Word of Wisdom” tcp server.
 
 ## How to run client
 1. `docker build -t pw-client .`
-2. `docker run --rm pw-server`
+2. `docker run --rm pw-client`
 
 ## How to run test
 `go test ./...`
